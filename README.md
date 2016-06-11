@@ -35,12 +35,12 @@ String sql1 = SqlBuilder.render("test.findSqlOfBeetl", new SqlBuilderPara("name"
 
 findSqlOfFreemarker
 ===
-
+-- 外部sql一样可以写注释
 select * from T_TEST AS i <#if order ??>ORDER BY i.date ${order} </#if>
 
 findSqlOfBeetl
 ===
-
+-- 注释2
 select * from T_TEST AS i <%if (!isEmpty(name)) {%>where i.name = '${name}' <%}%>
 
 
