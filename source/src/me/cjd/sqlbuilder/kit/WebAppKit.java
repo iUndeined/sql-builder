@@ -2,6 +2,7 @@ package me.cjd.sqlbuilder.kit;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.io.InputStream;
 
 public class WebAppKit {
 	
@@ -14,6 +15,10 @@ public class WebAppKit {
 			throw new RuntimeException("Sql Builder: WebAppKit.getPath()获取项目地址失败", e);
 		}
 		return uri.getPath();
+	}
+	
+	public final static InputStream getInnerFile(String fileName){
+		return WebAppKit.class.getResourceAsStream("/" + fileName);
 	}
 	
 }

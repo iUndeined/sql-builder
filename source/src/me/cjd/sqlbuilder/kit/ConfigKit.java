@@ -3,6 +3,7 @@ package me.cjd.sqlbuilder.kit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -24,14 +25,14 @@ public class ConfigKit {
 	
 	// 单例
 	private ConfigKit(){
-		FileInputStream userFis = null;
-		FileInputStream defaultFis = null;
+		InputStream userFis = null;
+		InputStream defaultFis = null;
 		// 获取 项目根路径
 		this.sqlFolderBase = WebAppKit.getPath();
 		// 加载 用户配置文件
 		File userConfigFile = new File(this.sqlFolderBase, "sqlbuilder-builder.properties");
-		// 加载 默认配置
-		File defaultConfigFile = new File(this.sqlFolderBase, "sqlbuilder-builder-default.properties");
+		// 破解 打包在.jar内读取不到的办法
+		defaultFis = WebAppKit.getInnerFile("sqlbuilder-builder-default.properties");
 		
 		try {
 			
@@ -43,11 +44,8 @@ public class ConfigKit {
 				user.load(userFis = new FileInputStream(userConfigFile));
 			}
 			
-			if (!defaultConfigFile.exists()) {
-				throw new RuntimeException("Sql Builder: ConfigKit.me()无法加载到默认配置文件，启动失败");
-			}
 			// 装载 默认配置
-			defaults.load(defaultFis = new FileInputStream(defaultConfigFile));
+			defaults.load(defaultFis);
 			// 获取 模式
 			this.sqlMode = user.getProperty("sqlMode", defaults.getProperty("sqlMode", "run"));
 			// 获取 目录们
