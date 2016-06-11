@@ -15,7 +15,7 @@
 第四步、引入 sql-builder-1.0.jar 包
 第五步、Java 代码内调用  
 
-<code>
+```
 
 // 如果您需要使用模板引擎来渲染那么  
 // 比如我使用beetl引擎  
@@ -25,4 +25,4 @@ SqlBuilder.setEngine(new SqlBeetlEngine());
 String sql0 = SqlBuilder.render("test.findSqlOfBeetl");  
 String sql1 = SqlBuilder.render("test.findSqlOfBeetl", new SqlBuilderPara("name", "颖"), ...);  
 
-</code>
+```
