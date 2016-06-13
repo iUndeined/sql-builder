@@ -3,6 +3,7 @@
 
 ## 工具优势
 
+整个工具大小仅22KB  
 读取外部sql.md文件并缓存  
 开放SqlRenderEngine接口让您可以自己渲染原生语句  
 内部已集成只要引入jar包即可直接使用的模板引擎（Beetl、Freemarker）  
@@ -12,7 +13,7 @@
 第一步、将sqlbuilder-builder.properties拷入您项目的src文件夹下  
 第二步、sqlFolders 填入sql文件存放目录，多目录用逗号（,）分隔  
 第三步、sqlMode 选择运行模式，run模式为产品模式读取缓存速度快，没有实时性；debug为开发模式，实时监测sql文件变化改动sql无需重启  
-第四步、引入 sql-builder-1.0.jar 包  
+第四步、引入 sql-builder-1.1.jar 包  
 第五步、Java 代码内调用    
 
 ```
