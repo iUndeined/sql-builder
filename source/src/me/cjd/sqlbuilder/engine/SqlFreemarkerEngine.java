@@ -10,7 +10,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.lang3.ArrayUtils;
+import me.cjd.sqlbuilder.commons.lang3.ArrayUtils;
 import me.cjd.sqlbuilder.model.SqlBuilderPara;
 
 public class SqlFreemarkerEngine implements SqlRenderEngine {

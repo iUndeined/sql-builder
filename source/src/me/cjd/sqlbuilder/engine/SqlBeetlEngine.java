@@ -1,7 +1,7 @@
 package me.cjd.sqlbuilder.engine;
 
 import java.io.IOException;
-import org.apache.commons.lang3.ArrayUtils;
+import me.cjd.sqlbuilder.commons.lang3.ArrayUtils;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -21,7 +21,7 @@ public class SqlBeetlEngine implements SqlRenderEngine {
 			throw new RuntimeException("Sql Builder: 初始化Beetl模板引擎发生错误 ", e);
 		}
 	}
-
+	
 	@Override
 	public String render(String sql, SqlBuilderPara... paras) {
 		// 获取 sql

@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
+import me.cjd.sqlbuilder.commons.lang3.ArrayUtils;
+import me.cjd.sqlbuilder.commons.lang3.StringUtils;
 
 /**
  * 配置工具
