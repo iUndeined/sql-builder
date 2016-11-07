@@ -5,16 +5,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
+import org.apache.log4j.Logger;
+
 import me.cjd.sqlbuilder.commons.lang3.StringUtils;
+import me.cjd.sqlbuilder.exception.RenderException;
 
 public class SqlBuilderReader {
+	
+	private final static Logger log = Logger.getLogger(SqlBuilderReader.class);
 	
 	private final static String ENTER = "\r\n";
 	
 	public final static String in(String sqlId){
 		String[] arrays = StringUtils.split(sqlId, ".", 2);
 		if (arrays.length != 2) {
-			throw new RuntimeException("Sql Builder: 错误的sqlId语句，示例 fileName.sqlName ");
+			LogKit.throwError(log, "错误的sqlId格式，示例 fileName.sqlName ", RenderException.class);
 		}
 		// 获取 各自信息
 		String fileName = arrays[0];
@@ -24,7 +30,7 @@ public class SqlBuilderReader {
 		String sqlMode = ConfigKit.me().getSqlMode();
 		// 判断 是不是产品模式
 		boolean sqlModeRun = StringUtils.isNotBlank(sqlMode) &&
-				StringUtils.equalsIgnoreCase(sqlMode, "run");
+				StringUtils.eqlsIgnoreCase(sqlMode, "run");
 		
 		if (sqlModeRun) {
 			String cacheSql = SqlBuilderCache.sql(fileName, sqlName);
@@ -35,15 +41,16 @@ public class SqlBuilderReader {
 		}
 		
 		// 声明 sqlMd文件类
-		File sqlMdFile = SqlBuilderSearcher.search(ConfigKit.me().getFolders(), fileName + ".md");
-		
-		if (!sqlMdFile.exists()) {
-			throw new RuntimeException("Sql Builder: 错误的sqlId，无法找到" + fileName + ".md");
+		File sqlMdFile = null;
+		try {
+			sqlMdFile = SqlBuilderSearcher.search(ConfigKit.me().getFolders(), fileName + ".md");
+		} catch (FileNotFoundException e) {
+			LogKit.throwError(log, "错误的sqlId，无法找到" + fileName + ".md", e, RenderException.class);
 		}
 		
 		FileReader fReader = null;
 		BufferedReader bReader = null;
-		StringBuffer sqlBuffer = new StringBuffer();
+		StringBuilder sqlBuilder = new StringBuilder();
 		
 		try {
 			fReader = new FileReader(sqlMdFile);
@@ -53,6 +60,7 @@ public class SqlBuilderReader {
 			String sqlLineTrim = null;
 			// 临时字段
 			String sqlLineTemp = null;
+			String sqlSonar = null;
 			
 			// 是否已经找到sql
 			boolean sqlFound = false;
@@ -71,7 +79,7 @@ public class SqlBuilderReader {
 					
 					if (StringUtils.isNotBlank(sqlLineTemp)) {
 						// 插入 结果
-						sqlBuffer.append(sqlLineTemp).append(ENTER);
+						sqlBuilder.append(sqlLineTemp).append(ENTER);
 					}
 					
 					sqlLineTemp = sqlLine;
@@ -79,22 +87,25 @@ public class SqlBuilderReader {
 					// 找sqlName
 					if (sqlFound = RegexpKit.test("^" + sqlName + "$", sqlLineTrim)) {
 						// 找到了就继续往下走一行
-						bReader.readLine();
+						sqlSonar = bReader.readLine();
+						log.debug("找到 sql 命名: " + sqlSonar + "，跳过本行");
 					}
 				}
 			}
 			
 			// 最后一个sql集无结束处理
 			if (StringUtils.isNotBlank(sqlLineTemp)) {
-				sqlBuffer.append(sqlLineTemp);
+				sqlBuilder.append(sqlLineTemp);
 			}
 			
 		} 
-		// 因为已经提前预防不会出现这个错误
-		catch (FileNotFoundException e) {}
+		// 因为已经提前预防不会出现这个错误，但是质量检测需要，那就加上吧
+		catch (FileNotFoundException e) {
+			LogKit.throwError(log, fileName + ".md文件找不到噢", e, RenderException.class);
+		}
 		
 		catch (IOException e) {
-			throw new RuntimeException("Sql Builder: " + fileName + ".md 读取过程发生错误");
+			LogKit.throwError(log, fileName + ".md 读取过程发生错误", e, RenderException.class);
 		}
 		
 		// 最后全要关闭
@@ -107,11 +118,11 @@ public class SqlBuilderReader {
 					fReader.close();
 				}
 			} catch (IOException e) {
-				throw new RuntimeException("Sql Builder: " + fileName + ".md 已读取完毕，但在关闭流的时候发生错误");
+				LogKit.error(log, fileName + ".md 已读取完毕，但在关闭流的时候发生错误", e);
 			}
 		}
 		
-		String sql = sqlBuffer.toString();
+		String sql = sqlBuilder.toString();
 		
 		if (StringUtils.isNotBlank(sql) && sqlModeRun) {
 			SqlBuilderCache.sql(fileName, sqlName, sql);

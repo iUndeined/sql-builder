@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class StringUtils {
 	
-	public static boolean equals(CharSequence cs1, CharSequence cs2) {
+	public static boolean eqls(CharSequence cs1, CharSequence cs2) {
 		if (cs1 == cs2) {
 			return true;
 		}
@@ -15,10 +15,10 @@ public class StringUtils {
 		if (((cs1 instanceof String)) && ((cs2 instanceof String))) {
 			return cs1.equals(cs2);
 		}
-		return CharSequenceUtils.regionMatches(cs1, false, 0, cs2, 0, Math.max(cs1.length(), cs2.length()));
+		return CharSequenceUtils.regiMatches(cs1, false, 0, cs2, 0, Math.max(cs1.length(), cs2.length()));
 	}
 	
-	public static boolean equalsIgnoreCase(CharSequence str1, CharSequence str2) {
+	public static boolean eqlsIgnoreCase(CharSequence str1, CharSequence str2) {
 		if ((str1 == null) || (str2 == null)) {
 			return str1 == str2;
 		}
@@ -28,11 +28,11 @@ public class StringUtils {
 		if (str1.length() != str2.length()) {
 			return false;
 		}
-		return CharSequenceUtils.regionMatches(str1, true, 0, str2, 0, str1.length());
+		return CharSequenceUtils.regiMatches(str1, true, 0, str2, 0, str1.length());
 	}
 	
 	public static boolean isEmpty(String str){
-		return (str == null) || (trim(str).equals(""));
+		return (str == null) || ("".equals(trim(str)));
 	}
 	
 	public static boolean isBlank(CharSequence cs) {
@@ -96,7 +96,7 @@ public class StringUtils {
 	public static String[] splitByWholeSeparatorPreserveAllTokens(String str, String separator, int max) {
 		return splitByWholeSeparatorWorker(str, separator, max, true);
 	}
-	  
+	
 	private static String[] splitByWholeSeparatorWorker(String str, String separator, int max,
 			boolean preserveAllTokens) {
 		if (str == null) {
@@ -216,46 +216,47 @@ public class StringUtils {
 					i++;
 				}
 			}
-		}
-		if (separatorChars.length() == 1) {
-			char sep = separatorChars.charAt(0);
-			while (i < len) {
-				if (str.charAt(i) == sep) {
-					if ((match) || (preserveAllTokens)) {
-						lastMatch = true;
-						if (sizePlus1++ == max) {
-							i = len;
-							lastMatch = false;
-						}
-						list.add(str.substring(start, i));
-						match = false;
-					}
-					i++;
-					start = i;
-				} else {
-					lastMatch = false;
-					match = true;
-					i++;
-				}
-			}
 		} else {
-			while (i < len) {
-				if (separatorChars.indexOf(str.charAt(i)) >= 0) {
-					if ((match) || (preserveAllTokens)) {
-						lastMatch = true;
-						if (sizePlus1++ == max) {
-							i = len;
-							lastMatch = false;
+			if (separatorChars.length() == 1) {
+				char sep = separatorChars.charAt(0);
+				while (i < len) {
+					if (str.charAt(i) == sep) {
+						if ((match) || (preserveAllTokens)) {
+							lastMatch = true;
+							if (sizePlus1++ == max) {
+								i = len;
+								lastMatch = false;
+							}
+							list.add(str.substring(start, i));
+							match = false;
 						}
-						list.add(str.substring(start, i));
-						match = false;
+						i++;
+						start = i;
+					} else {
+						lastMatch = false;
+						match = true;
+						i++;
 					}
-					i++;
-					start = i;
-				} else {
-					lastMatch = false;
-					match = true;
-					i++;
+				}
+			} else {
+				while (i < len) {
+					if (separatorChars.indexOf(str.charAt(i)) >= 0) {
+						if ((match) || (preserveAllTokens)) {
+							lastMatch = true;
+							if (sizePlus1++ == max) {
+								i = len;
+								lastMatch = false;
+							}
+							list.add(str.substring(start, i));
+							match = false;
+						}
+						i++;
+						start = i;
+					} else {
+						lastMatch = false;
+						match = true;
+						i++;
+					}
 				}
 			}
 		}

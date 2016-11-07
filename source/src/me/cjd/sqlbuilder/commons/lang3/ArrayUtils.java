@@ -1,5 +1,9 @@
 package me.cjd.sqlbuilder.commons.lang3;
 
+/**
+ * 将apache-commons.lange3包的数组工具类源码移到了过来
+ * @author Mr.cjd
+ */
 public class ArrayUtils {
 	
 	public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
@@ -22,6 +26,10 @@ public class ArrayUtils {
 	public static final char[] EMPTY_CHAR_ARRAY = new char[0];
 	public static final Character[] EMPTY_CHARACTER_OBJECT_ARRAY = new Character[0];
 	public static final int INDEX_NOT_FOUND = -1;
+	
+	private ArrayUtils() {
+		throw new IllegalAccessError("Utility class");
+	}
 	
 	public static boolean isEmpty(Object[] arrays){
 		return (arrays == null) || (arrays.length == 0);
