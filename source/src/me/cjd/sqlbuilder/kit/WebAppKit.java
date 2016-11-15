@@ -2,6 +2,8 @@ package me.cjd.sqlbuilder.kit;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 
 import me.cjd.sqlbuilder.exception.PathException;
@@ -16,7 +18,16 @@ public class WebAppKit {
 		// 获取 地址
 		URI uri = null;
 		try {
-			uri = WebAppKit.class.getClassLoader().getResource("/").toURI();
+			ClassLoader webLoader = WebAppKit.class.getClassLoader();
+			URL url = webLoader.getResource("/");
+			if (url == null) {
+				url = WebAppKit.class.getResource("/");
+				if (url == null) {
+					log.error("WebAppKit.getPath() 无法正确获取到项目路径 ");
+					throw new PathException();
+				}
+			}
+			uri = url.toURI();
 		} catch (URISyntaxException e) {
 			LogKit.throwError(log, PathException.GET_ERROR, e, PathException.class);
 		}
