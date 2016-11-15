@@ -3,7 +3,7 @@
 
 ## 工具优势
 
-整个工具大小仅24KB  
+整个工具大小仅31KB  
 读取外部sql.md文件并缓存  
 开放SqlRenderEngine接口让您可以自己渲染原生语句  
 内部已集成只要引入jar包即可直接使用的模板引擎（Beetl、Freemarker）  
