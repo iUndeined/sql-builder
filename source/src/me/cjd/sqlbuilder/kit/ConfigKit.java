@@ -7,14 +7,20 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.log4j.Logger;
+
 import me.cjd.sqlbuilder.commons.lang3.ArrayUtils;
 import me.cjd.sqlbuilder.commons.lang3.StringUtils;
+import me.cjd.sqlbuilder.exception.ConfigInstanceException;
 
 /**
  * 配置工具
  * @author Mr.cjd
  */
 public class ConfigKit {
+	
+	private final static Logger log = Logger.getLogger(ConfigKit.class);
 	
 	// 声明 sql存在的目录们
 	private List<String> folders = null;
@@ -30,9 +36,9 @@ public class ConfigKit {
 		// 获取 项目根路径
 		this.sqlFolderBase = WebAppKit.getPath();
 		// 加载 用户配置文件
-		File userConfigFile = new File(this.sqlFolderBase, "sqlbuilder-builder.properties");
+		File userConfigFile = new File(this.sqlFolderBase, "sqlbuilder-config.properties");
 		// 破解 打包在.jar内读取不到的办法
-		defaultFis = WebAppKit.getInnerFile("sqlbuilder-builder-default.properties");
+		defaultFis = WebAppKit.getInnerFile("sqlbuilder-config-default.properties");
 		
 		try {
 			
@@ -51,7 +57,7 @@ public class ConfigKit {
 			// 获取 目录们
 			this.sqlFolders = user.getProperty("sqlFolders", defaults.getProperty("sqlFolders", ""));
 		} catch (IOException e) {
-			throw new RuntimeException("Sql Builder: ConfigKit.me()获取项目地址失败", e);
+			LogKit.throwError(log, "Sql Builder 配置文件错误化发生错误", e, ConfigInstanceException.class);
 		} finally {
 			try {
 				if (userFis != null) {
@@ -61,7 +67,7 @@ public class ConfigKit {
 					defaultFis.close();
 				}
 			} catch (IOException e) {
-				throw new RuntimeException("Sql Builder: ConfigKit.me() 已成功获取配置，但无法关闭文件", e);
+				log.error("ConfigKit.me() 已成功获取配置，但无法关闭文件", e);
 			}
 		}
 	}
@@ -84,7 +90,8 @@ public class ConfigKit {
 				this.folders = new ArrayList<>(arrays.length + 1);
 				this.folders.add(this.sqlFolderBase);
 				for (String folder : arrays) {
-					this.folders.add(this.sqlFolderBase + StringUtils.trimToEmpty(folder).replaceAll("\\.", "/"));
+					String userFolder = this.sqlFolderBase + StringUtils.trimToEmpty(folder).replaceAll("\\.", "/");
+					this.folders.add(userFolder);
 				}
 			}
 		}

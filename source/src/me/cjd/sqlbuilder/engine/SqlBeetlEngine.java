@@ -2,6 +2,8 @@ package me.cjd.sqlbuilder.engine;
 
 import java.io.IOException;
 import me.cjd.sqlbuilder.commons.lang3.ArrayUtils;
+import me.cjd.sqlbuilder.exception.EngineException;
+
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -18,7 +20,7 @@ public class SqlBeetlEngine implements SqlRenderEngine {
 			resourceLoader = new StringTemplateResourceLoader();
 			cfg =  Configuration.defaultConfiguration();
 		} catch (IOException e) {
-			throw new RuntimeException("Sql Builder: 初始化Beetl模板引擎发生错误 ", e);
+			throw new EngineException(EngineException.BEETL_INIT_ERROR, e);
 		}
 	}
 	
