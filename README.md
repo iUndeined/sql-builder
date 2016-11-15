@@ -44,6 +44,16 @@ findSqlOfBeetl
 -- 注释2
 select * from T_TEST AS i <%if (!isEmpty(name)) {%>where i.name = '${name}' <%}%>
 
+fromUserId
+===
+from user where id = ? 
+
+findUserName
+===
+-- 语句引入函数
+-- 引入本文件直接写语句名称
+-- 引入它文件如普通调用 test.yourSqlName 即可
+select username sql('fromUserId') 
 
 ```
 
@@ -57,13 +67,21 @@ SqlBuilder.setEngine(new SqlBeetlEngine());
 // Beetl
 String sql1 = SqlBuilder.render("test.findSqlOfBeetl", new SqlBuilderPara("name", "颖"));
 
-System.out.println("Beetl渲染：" + sql1);
+System.out.println("Beetl渲染：");
+System.out.println(sql1);
 
 // Freemarker
 // 设置 单独模板引擎
 String sql2 = SqlBuilder.render(new SqlFreemarkerEngine(), "test.findSqlOfFreemarker", new SqlBuilderPara("order", "DESC"));
 
-System.out.println("Freemarker渲染：" + sql2);
+System.out.println("Freemarker渲染：");
+System.out.println(sql2);
+
+// 语句引入函数用例
+String sql3 = SqlBuilder.render("test.findUserName");
+
+System.out.println("sql('...') 函数渲染：");
+System.out.println(sql3);
 
 ```
 
@@ -71,13 +89,22 @@ System.out.println("Freemarker渲染：" + sql2);
 
 ```
 
-Beetl渲染：select * from T_TEST AS i where i.name = '颖' 
+Beetl渲染：  
+select * from T_TEST AS i where i.name = '颖'  
 
-Freemarker渲染：select * from T_TEST AS i ORDER BY i.date DESC 
+Freemarker渲染：  
+select * from T_TEST AS i ORDER BY i.date DESC  
+
+sql('...') 函数渲染：  
+select * from user where id = ?  
 
 ```
 
 ## 更新日志
+
+V1.3  
+[新增] sql('...') 语句引入函数支持  
+[新增] 中间件接口，提升扩展性  
 
 V1.2  
 [新增] log4j 日志  
