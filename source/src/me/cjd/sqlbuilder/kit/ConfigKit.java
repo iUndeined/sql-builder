@@ -23,11 +23,12 @@ public class ConfigKit {
 	private final static Logger log = Logger.getLogger(ConfigKit.class);
 	
 	// 声明 sql存在的目录们
-	private List<String> folders = null;
+	private List<String> folders;
 	
-	private String sqlMode = null;
-	private String sqlFolders = null;
-	private String sqlFolderBase = null;
+	private String sqlMode;
+	private String sqlFolders;
+	private String sqlFolderBase;
+	private String sqlMid;
 	
 	// 单例
 	private ConfigKit(){
@@ -56,6 +57,8 @@ public class ConfigKit {
 			this.sqlMode = user.getProperty("sqlMode", defaults.getProperty("sqlMode", "run"));
 			// 获取 目录们
 			this.sqlFolders = user.getProperty("sqlFolders", defaults.getProperty("sqlFolders", ""));
+			// 获取 中间件
+			this.sqlMid = user.getProperty("sqlMid", defaults.getProperty("sqlMid", ""));
 		} catch (IOException e) {
 			LogKit.throwError(log, "Sql Builder 配置文件错误化发生错误", e, ConfigInstanceException.class);
 		} finally {
@@ -98,10 +101,6 @@ public class ConfigKit {
 		return folders;
 	}
 	
-	public static void main(String[] args) {
-		ConfigKit.me().getFolders();
-	}
-	
 	public void setFolders(List<String> folders) {
 		this.folders = folders;
 	}
@@ -120,6 +119,14 @@ public class ConfigKit {
 	
 	public void setSqlFolders(String sqlFolders) {
 		this.sqlFolders = sqlFolders;
+	}
+
+	public String getSqlMid() {
+		return sqlMid;
+	}
+
+	public void setSqlMid(String sqlMid) {
+		this.sqlMid = sqlMid;
 	}
 	
 }

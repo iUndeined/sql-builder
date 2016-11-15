@@ -10,7 +10,7 @@ public class SqlBuilder {
 	private static SqlRenderEngine engine = new SqlNoneEngine();
 	
 	public final static String render(SqlRenderEngine iEngine, String sqlId, SqlBuilderPara... paras){
-		return iEngine.render(SqlBuilderReader.in(sqlId), paras);
+		return iEngine.render(SqlBuilderReader.in(sqlId, paras), paras);
 	}
 	
 	public final static String render(String sqlId, SqlBuilderPara... paras){

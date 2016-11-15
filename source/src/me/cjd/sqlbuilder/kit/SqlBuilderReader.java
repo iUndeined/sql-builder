@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.util.List;
 import org.apache.log4j.Logger;
-
 import me.cjd.sqlbuilder.commons.lang3.StringUtils;
 import me.cjd.sqlbuilder.exception.RenderException;
+import me.cjd.sqlbuilder.middleware.SqlMiddleware;
+import me.cjd.sqlbuilder.model.SqlBuilderPara;
 
 public class SqlBuilderReader {
 	
@@ -17,7 +18,7 @@ public class SqlBuilderReader {
 	
 	private final static String ENTER = "\r\n";
 	
-	public final static String in(String sqlId){
+	public final static String in(String sqlId, SqlBuilderPara... paras){
 		String[] arrays = StringUtils.split(sqlId, ".", 2);
 		if (arrays.length != 2) {
 			LogKit.throwError(log, "错误的sqlId格式，示例 fileName.sqlName ", RenderException.class);
@@ -126,6 +127,14 @@ public class SqlBuilderReader {
 		
 		if (StringUtils.isNotBlank(sql) && sqlModeRun) {
 			SqlBuilderCache.sql(fileName, sqlName, sql);
+		}
+		
+		// 获取 中间件
+		List<SqlMiddleware> mids = SqlMidKit.list();
+		if (mids != null && !mids.isEmpty()) {
+			for (SqlMiddleware mid : mids) {
+				sql = mid.render(fileName, sql, paras);
+			}
 		}
 		
 		return sql;
