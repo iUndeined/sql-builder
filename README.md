@@ -14,7 +14,7 @@
 第二步、并将其更名为 sqlbuilder-config.properties  
 第三步、sqlFolders 填入sql文件存放目录，多目录用逗号（,）分隔  
 第四步、sqlMode 选择运行模式，run模式为产品模式读取缓存速度快，没有实时性；debug为开发模式，实时监测sql文件变化改动sql无需重启  
-第五步、引入 sql-builder-1.1.jar 包  
+第五步、引入 sql-builder-1.2.jar 包  
 第六步、Java 代码内调用    
 
 ```java
