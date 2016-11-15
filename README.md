@@ -79,18 +79,18 @@ Freemarker渲染：select * from T_TEST AS i ORDER BY i.date DESC
 
 ## 更新日志
 
-V1.2 
-[新增] log4j 日志
-[新增] 国产达梦数据库sql语句渲染支持
-[优化] 使用Sonarqube对代码质量进行优化
-[修复] 修复了一些小bug
-[测试] 根据在正式商业项目中上线使用进行的优化调整
-
-v1.1
-[优化] 移除了对 apache-commons-lange3工具包的依赖
-
-v1.0
-[出生] 项目首次登录 git.
+V1.2  
+[新增] log4j 日志  
+[新增] 国产达梦数据库sql语句渲染支持  
+[优化] 使用Sonarqube对代码质量进行优化  
+[修复] 修复了一些小bug  
+[测试] 根据在正式商业项目中上线使用进行的优化调整  
+  
+v1.1  
+[优化] 移除了对 apache-commons-lange3工具包的依赖  
+  
+v1.0  
+[出生] 项目首次登录 git.  
 
 ------
 
