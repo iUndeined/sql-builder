@@ -17,3 +17,7 @@ findSqlOfVelocity
 ===
 
 select * from T_TEST AS i #if(order != null) ORDER BY i.id ${order} #end
+
+orderUser
+===
+order by ${orderName!} ${orderRule!}

@@ -1,3 +1,7 @@
+fromUser
+===
+from t_user where enable = 1 
+
 findUser
 ===
-select * from t_user
+select * sql('fromUser') sql('test.orderUser');

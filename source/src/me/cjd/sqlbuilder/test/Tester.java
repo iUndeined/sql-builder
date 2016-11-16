@@ -23,6 +23,14 @@ public class Tester {
 		System.out.println("Freemarker渲染：");
 		System.out.println(sql2);
 		
+		// Beetl 全局模板引擎
+		// sql('...') 语句引入函数
+		String sql3 = SqlBuilder.render("user.findUser",
+				new SqlBuilderPara("orderName", "order_idx")
+			,	new SqlBuilderPara("orderRule", "desc"));
+		
+		System.out.println("语句引入函数渲染：");
+		System.out.println(sql3);
 	}
 	
 }
