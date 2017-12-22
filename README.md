@@ -29,11 +29,12 @@ SqlBuilder.setEngine(new SqlBeetlEngine());
 // 获取sql语句，test为文件名称，findSqlOfBeetl为语句唯一id，重名则获取第一个  
 String sql0 = SqlBuilder.render("test.findSqlOfBeetl");  
 
-// 该传参构造在 v1.3.5版本已不推荐使用
+// 该传参构造在 v1.3.5 版本已不推荐使用
 String sql1 = SqlBuilder.render("test.findSqlOfBeetl", new SqlBuilderPara("name", "颖"), ...); 
 
 // 推荐使用
 String sql2 = SqlBuilder.sql("test.findSqlOfBeetl")
+// 不指定engine则使用全局引擎
 // 指定模板渲染引擎，仅作用于该条语句，后设置会覆盖前设置
 // 使用 freemarker 引擎
 .engine(SqlFreemarkerEngine.class)
