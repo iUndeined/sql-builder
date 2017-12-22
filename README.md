@@ -1,31 +1,47 @@
-在为Java Code里超长的Sql而烦恼吗？SqlBuilder帮助您！！！
+不再为Java代码中难以维护的Sql语句而烦恼，SqlBuilder帮助您！
 ====
 
 ## 工具优势
 
-整个工具大小仅31KB  
+整个工具大小仅36.6KB  
 读取外部sql.md文件并缓存  
 开放SqlRenderEngine接口让您可以自己渲染原生语句  
 内部已集成只要引入jar包即可直接使用的模板引擎（Beetl、Freemarker）  
 
 ## 1分钟快速配置
 
-第一步、将 sqlbuilder-config-default.properties 拷入您的项目src文件夹下  
-第二步、并将其更名为 sqlbuilder-config.properties  
-第三步、sqlFolders 填入sql文件存放目录，多目录用逗号（,）分隔  
-第四步、sqlMode 选择运行模式，run模式为产品模式读取缓存速度快，没有实时性；debug为开发模式，实时监测sql文件变化改动sql无需重启  
-第五步、引入 sql-builder-v1.3.jar 包  
-第六步、Java 代码内调用    
+1. 将 sqlbuilder-config-default.properties 拷入您的项目src文件夹下  
+2. 并将其更名为 sqlbuilder-config.properties  
+3. sqlFolders 填入sql文件存放目录，多目录用逗号（,）分隔  
+4. sqlMode 选择运行模式，run模式为产品模式读取缓存速度快，没有实时性；debug为开发模式，实时监测sql文件变化改动sql无需重启  
+5. 引入 sql-builder-v1.3.5.jar 包  
+6. Java 代码内调用    
 
 ```java
 
-// 如果您需要使用模板引擎来渲染那么  
-// 比如我使用beetl引擎  
+/**
+ * 如果您需要使用模板引擎来渲染那么
+ * 在这里设置一个全局引擎
+ * 比如我使用beetl引擎  
+ */
 SqlBuilder.setEngine(new SqlBeetlEngine());  
   
 // 获取sql语句，test为文件名称，findSqlOfBeetl为语句唯一id，重名则获取第一个  
 String sql0 = SqlBuilder.render("test.findSqlOfBeetl");  
-String sql1 = SqlBuilder.render("test.findSqlOfBeetl", new SqlBuilderPara("name", "颖"), ...);  
+// 该传参构造在 v1.3.5版本已不推荐使用
+String sql1 = SqlBuilder.render("test.findSqlOfBeetl", new SqlBuilderPara("name", "颖"), ...); 
+// 推荐使用
+String sql2 = SqlBuilder.sql("test.findSqlOfBeetl")
+// 指定模板渲染引擎，仅作用于该条语句，后设置会覆盖前设置
+// 使用 freemarker 引擎
+.engine(SqlFreemarkerEngine.class)
+// 使用 beetl 引擎
+.engine(SqlBeetlEngine.class)
+// 设置参数
+.para("name", "颖")
+.para(..., ...)
+// 渲染语句
+.render();
 
 ```
 
@@ -101,6 +117,21 @@ select * from user where id = ?
 ```
 
 ## 更新日志
+v1.3.5  
+[新增] 增加新的构造方式 SqlBuilder.sql('fileName.sqlId').para(key, value).para(key, value).render();  
+
+v1.3.4  
+[修复] SqlBuilderPara 传 null 值会发生错误的问题  
+
+v1.3.3  
+[修复] SqlBuilderModel 无法toJSONString的问题  
+
+v1.3.2  
+[新增] SqlBuilderModel 类支持jfinal的快速使用  
+[新增] 配置文件 sqlDebug=true 调试模式，输出渲染前后语句以及参数  
+
+v1.3.1  
+[优化] 达梦数据库SQL语句渲染代码  
 
 V1.3  
 [新增] sql('...') 语句引入函数支持  
@@ -124,5 +155,7 @@ v1.0
 未完待续
 感谢您花费时间阅读这份说明稿。
 
+今天是我生日，Happy birthday to me。
+
 作者 cjd   
-2016 年 11月15日    
+2017 年 12月22日    
